@@ -3,7 +3,8 @@ import tkinter.font as tkFont
 
 board = [[None] * 3 for _ in range(3)]
 turn = 0
-
+playerX = 0
+playerY = 0
 
 def button_disable():
     for i in range(3):
@@ -28,6 +29,7 @@ is_win = False
 
 
 def check_win(i, j):
+    global playerX,playerY
     global turn
     global is_win
     turn += 1
@@ -38,35 +40,66 @@ def check_win(i, j):
         buttons[i][j].config(text="O", state=tk.DISABLED, disabledforeground="#00CCFF")
         board[i][j] = "O"
 
-    for i in range(0, 3):
+    for i in range(3):
         if board[i][0] == board[i][1] == board[i][2] and board[i][0] is not None:
             label.config(text=f"{board[i][0]}\nWINNER")
             is_win = True
+            if board[i][1] == "X":
+                playerX +=1
+            elif board[i][1] == "O":
+                playerY +=1
+            
+            playerXscore.config(text=playerX)
+            playerOscore.config(text=playerY)
             button_disable()
-
-    for i in range(0, 3):
+            return 
+        
+    for i in range(3):
         if board[0][i] == board[1][i] == board[2][i] and board[0][i] is not None:
             label.config(text=f"{board[0][i]}\nWINNER")
             is_win = True
+            if board[0][i] == "X":
+                playerX +=1
+            elif board[0][i] == "O":
+                playerY +=1
+            
+            playerXscore.config(text=playerX)
+            playerOscore.config(text=playerY)
             button_disable()
+            return
 
     if board[0][0] == board[1][1] == board[2][2] and board[0][0] is not None:
         label.config(text=f"{board[0][0]}\nWINNER")
         is_win = True
-        button_disable()
 
+        if board[0][0] == "X":
+            playerX +=1
+        elif board[0][0] == "O":
+            playerY +=1
+       
+        playerXscore.config(text=playerX)
+        playerOscore.config(text=playerY)
+        button_disable()
+        return
     if board[0][2] == board[1][1] == board[2][0] and board[0][2] is not None:
         label.config(text=f"{board[0][2]}\nWINNER")
         is_win = True
+        if board[0][2] == "X":
+            playerX +=1
+        elif board[0][2] == "O":
+            playerY +=1
+    
+        playerXscore.config(text=playerX)
+        playerOscore.config(text=playerY)
         button_disable()
-
+        return
+    
     if turn == 9 and is_win is False:
         label.config(text="DRAW")
 
 
+
 is_dark = 0
-
-
 def change_theme():
     global is_dark
     if is_dark == 0:
@@ -140,6 +173,25 @@ label = tk.Label(
     width=10,
     height=2,
 )
+playerOscore = tk.Label(
+    root,
+    text="0",
+    font=custom_font,
+    fg="#1399FF",
+    width=10,
+    height=2
+)
+playerXscore = tk.Label(
+    root,
+    text="0",
+    font=custom_font,
+    fg="#FF0077",
+    width=10,
+    height=2
+)
+
 label.grid(row=3, column=1)
+playerOscore.grid(row=4, column=2)
+playerXscore.grid(row=4,column=0)
 
 root.mainloop()
